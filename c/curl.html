@@ -10,7 +10,7 @@
     <meta name="keywords" content="Linux,Command,命令大全,Linux命令手册,curl,利用URL规则在命令行下工作的文件传输工具">
     <title>curl 命令，Linux curl 命令详解：利用URL规则在命令行下工作的文件传输工具 -  Linux 命令搜索引擎</title>
     <link rel="shortcut icon" href="../img/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="../css/index.css?v=1569814735528">
+    <link rel="stylesheet" type="text/css" href="../css/index.css?v=1570678476121">
 </head>
 <body>
 <a href="https://github.com/jaywcjlove/linux-command" target="_blank" class="github-corner"> <svg viewBox="0 0 250 250"><!-- kenny wang <wowohoo@qq.com> https://github.com/jaywcjlove --> <title>logo</title> <desc>Linux Command Logo. https://github.com/jaywcjlove</desc><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg> </a>
@@ -152,10 +152,16 @@
 <pre><code class="language-shell"><span class="token function">curl</span> URL --silent</code></pre>
 <p>这条命令是将下载文件输出到终端，所有下载的数据都被写入到stdout。</p>
 <p>使用选项<code>-O</code>将下载的数据写入到文件，必须使用文件的绝对地址：</p>
-<pre><code class="language-shell"><span class="token function">curl</span> http://wangchujiang.com/text.iso --silent -O</code></pre>
+<pre><code class="language-shell"><span class="token function">curl</span> http://example.com/text.iso --silent -O</code></pre>
 <p>选项<code>-o</code>将下载数据写入到指定名称的文件中，并使用<code>--progress</code>显示进度条：</p>
-<pre><code class="language-shell"><span class="token function">curl</span> http://wangchujiang.com/test.iso -o filename.iso --progress
+<pre><code class="language-shell"><span class="token function">curl</span> http://example.com/test.iso -o filename.iso --progress
 <span class="token comment">######################################### 100.0%</span></code></pre>
+<p><strong>不输出错误和进度信息</strong></p>
+<p><code>-s</code> 参数将不输出错误和进度信息。</p>
+<pre><code class="language-shell"><span class="token function">curl</span> -s https://www.example.com
+<span class="token comment"># 上面命令一旦发生错误，不会显示错误信息。不发生错误的话，会正常显示运行结果。</span></code></pre>
+<p>如果想让 curl 不产生任何输出，可以使用下面的命令。</p>
+<pre><code class="language-shell"><span class="token function">curl</span> -s -o /dev/null https://google.com</code></pre>
 <p><strong>断点续传</strong></p>
 <p>curl能够从特定的文件偏移处继续下载，它可以通过指定一个便宜量来下载部分文件：</p>
 <pre><code class="language-shell"><span class="token function">curl</span> URL/File -C 偏移量
@@ -166,11 +172,6 @@
 <p>参照页是位于HTTP头部中的一个字符串，用来表示用户是从哪个页面到达当前页面的，如果用户点击网页A中的某个连接，那么用户就会跳转到B网页，网页B头部的参照页字符串就包含网页A的URL。</p>
 <p>使用<code>--referer</code>选项指定参照页字符串：</p>
 <pre><code class="language-shell"><span class="token function">curl</span> --referer http://www.google.com http://wangchujiang.com</code></pre>
-<p><strong>用curl设置cookies</strong></p>
-<p>使用<code>--cookie &quot;COKKIES&quot;</code>选项来指定cookie，多个cookie使用分号分隔：</p>
-<pre><code class="language-shell"><span class="token function">curl</span> http://wangchujiang.com --cookie <span class="token string">"user=root;pass=123456"</span></code></pre>
-<p>将cookie另存为一个文件，使用<code>--cookie-jar</code>选项：</p>
-<pre><code class="language-shell"><span class="token function">curl</span> URL --cookie-jar cookie_file</code></pre>
 <p><strong>用curl设置用户代理字符串</strong></p>
 <p>有些网站访问会提示只能使用IE浏览器来访问，这是因为这些网站设置了检查用户代理，可以使用curl把用户代理设置为IE，这样就可以访问了。使用<code>--user-agent</code>或者<code>-A</code>选项：</p>
 <pre><code class="language-shell"><span class="token function">curl</span> URL --user-agent <span class="token string">"Mozilla/5.0"</span>
@@ -184,6 +185,8 @@
 <p>使用<code>--max-filesize</code>指定可下载的最大文件大小：</p>
 <pre><code class="language-shell"><span class="token function">curl</span> URL --max-filesize bytes</code></pre>
 <p>如果文件大小超出限制，命令则返回一个非0退出码，如果命令正常则返回0。</p>
+<pre><code class="language-shell"><span class="token function">curl</span> --limit-rate 200k https://example.com
+<span class="token comment"># 上面命令将带宽限制在每秒 200K 字节。</span></code></pre>
 <p><strong>用curl进行认证</strong></p>
 <p>使用curl选项 -u 可以完成HTTP或者FTP的认证，可以指定密码，也可以不指定密码在后续操作中输入密码：</p>
 <pre><code class="language-shell"><span class="token function">curl</span> -u user:pwd http://wangchujiang.com
@@ -204,9 +207,71 @@ X-Pingback: http://wangchujiang.com/xmlrpc.php</code></pre>
 <span class="token function">curl</span> -l <span class="token string">"http://www.wangchujiang.com"</span> <span class="token comment"># 只显示头部信息</span>
 <span class="token function">curl</span> -v <span class="token string">"http://www.wangchujiang.com"</span> <span class="token comment"># 显示get请求全过程解析</span></code></pre>
 <p><strong>post请求</strong></p>
-<pre><code class="language-shell"><span class="token function">curl</span> -d <span class="token string">"param1=value1&amp;param2=value2"</span> <span class="token string">"http://www.wangchujiang.com"</span></code></pre>
+<pre><code class="language-shell">&#36; <span class="token function">curl</span> -d <span class="token string">"param1=value1&amp;param2=value2"</span> <span class="token string">"http://www.wangchujiang.com/login"</span>
+
+<span class="token function">curl</span> -d<span class="token string">'login=emma＆password=123'</span> -X POST https://wangchujiang.com/login
+<span class="token comment"># 或者</span>
+&#36; <span class="token function">curl</span> -d <span class="token string">'login=emma'</span> -d <span class="token string">'password=123'</span> -X POST  https://wangchujiang.com/login</code></pre>
+<p><code>--data-urlencode</code> 参数等同于 <code>-d</code>，发送 <code>POST</code> 请求的数据体，区别在于会自动将发送的数据进行 <code>URL</code> 编码。</p>
+<pre><code class="language-shell"><span class="token function">curl</span> --data-urlencode <span class="token string">'comment=hello world'</span> https://wangchujiang.com/login
+<span class="token comment"># 上面代码中，发送的数据hello world之间有一个空格，需要进行 URL 编码。</span></code></pre>
+<p><strong>读取本地文本文件的数据，向服务器发送</strong></p>
+<pre><code class="language-shell"><span class="token function">curl</span> -d <span class="token string">'@data.txt'</span> https://wangchujiang.com/upload
+<span class="token comment"># 读取data.txt文件的内容，作为数据体向服务器发送。</span></code></pre>
 <p><strong>json格式的post请求</strong></p>
 <pre><code class="language-shell"><span class="token function">curl</span> -l -H <span class="token string">"Content-type: application/json"</span> -X POST -d <span class="token string">'{"phone":"13521389587","password":"test"}'</span> http://wangchujiang.com/apis/users.json</code></pre>
+<p><strong>向服务器发送 Cookie</strong></p>
+<p>使用<code>--cookie &quot;COKKIES&quot;</code>选项来指定cookie，多个cookie使用分号分隔：</p>
+<pre><code class="language-shell"><span class="token function">curl</span> http://wangchujiang.com --cookie <span class="token string">"user=root;pass=123456"</span></code></pre>
+<p>将cookie另存为一个文件，使用<code>--cookie-jar</code>选项：</p>
+<pre><code class="language-shell"><span class="token function">curl</span> URL --cookie-jar cookie_file</code></pre>
+<p><code>-b</code> 参数用来向服务器发送 Cookie。</p>
+<pre><code class="language-shell"><span class="token function">curl</span> -b <span class="token string">'foo=bar'</span> https://taobao.com
+<span class="token comment"># 上面命令会生成一个标头Cookie: foo=bar，向服务器发送一个名为foo、值为bar的 Cookie。</span></code></pre>
+<pre><code class="language-shell"><span class="token function">curl</span> -b <span class="token string">'foo1=bar'</span> -b <span class="token string">'foo2=baz'</span> https://taobao.com
+<span class="token comment"># 上面命令发送两个 Cookie。</span>
+
+```shell
+<span class="token function">curl</span> -b cookies.txt https://www.taobao.com
+<span class="token comment"># 上面命令读取本地文件 cookies.txt，里面是服务器设置的 Cookie（参见-c参数），将其发送到服务器。</span></code></pre>
+<p><strong>Cookie 写入一个文件</strong></p>
+<pre><code class="language-shell"><span class="token function">curl</span> -c cookies.txt https://www.taobao.com
+<span class="token comment"># 上面命令将服务器的 HTTP 回应所设置 Cookie 写入文本文件cookies.txt。</span></code></pre>
+<p><strong>请求的来源</strong></p>
+<p><code>-e</code> 参数用来设置 <code>HTTP</code> 的标头 <code>Referer</code>，表示请求的来源。</p>
+<pre><code class="language-shell"><span class="token function">curl</span> -e <span class="token string">'https://taobao.com?q=example'</span> https://www.example.com
+<span class="token comment"># 上面命令将Referer标头设为 https://taobao.com?q=example。</span></code></pre>
+<p><code>-H</code> 参数可以通过直接添加标头 <code>Referer</code>，达到同样效果。</p>
+<pre><code class="language-shell"><span class="token function">curl</span> -H <span class="token string">'Referer: https://taobao.com?q=example'</span> https://www.example.com</code></pre>
+<p><strong>上传二进制文件</strong></p>
+<p><code>-F</code> 参数用来向服务器上传二进制文件。</p>
+<pre><code class="language-shell"><span class="token function">curl</span> -F <span class="token string">'file=@photo.png'</span> https://taobao.com/profile
+<span class="token comment"># 上面命令会给 HTTP 请求加上标头 Content-Type: multipart/form-data ，然后将文件photo.png作为file字段上传。</span></code></pre>
+<p><code>-F</code> 参数可以指定 <code>MIME</code> 类型。</p>
+<pre><code class="language-shell"><span class="token function">curl</span> -F <span class="token string">'file=@photo.png;type=image/png'</span> https://taobao.com/profile
+<span class="token comment"># 上面命令指定 MIME 类型为image/png，否则 curl 会把 MIME 类型设为 application/octet-stream。</span></code></pre>
+<p><code>-F</code> 参数也可以指定文件名。</p>
+<pre><code class="language-shell"><span class="token function">curl</span> -F <span class="token string">'file=@photo.png;filename=me.png'</span> https://taobao.com/profile
+<span class="token comment"># 上面命令中，原始文件名为photo.png，但是服务器接收到的文件名为me.png。</span></code></pre>
+<p><strong>设置请求头</strong></p>
+<p><code>-H</code> 参数添加 <code>HTTP</code> 请求的标头。</p>
+<pre><code class="language-shell"><span class="token function">curl</span> -H <span class="token string">'Accept-Language: en-US'</span> https://google.com
+<span class="token comment"># 上面命令添加 HTTP 标头 Accept-Language: en-US。</span></code></pre>
+<pre><code class="language-shell"><span class="token function">curl</span> -H <span class="token string">'Accept-Language: en-US'</span> -H <span class="token string">'Secret-Message: xyzzy'</span> https://google.com
+<span class="token comment"># 上面命令添加两个 HTTP 标头。</span></code></pre>
+<pre><code class="language-shell"><span class="token function">curl</span> -d <span class="token string">'{"login": "emma", "pass": "123"}'</span> -H <span class="token string">'Content-Type: application/json'</span> https://google.com/login
+<span class="token comment"># 上面命令添加 HTTP 请求的标头是 Content-Type: application/json，然后用 -d 参数发送 JSON 数据。</span></code></pre>
+<p><strong>跳过 SSL 检测</strong></p>
+<pre><code class="language-shell"><span class="token function">curl</span> -k https://www.example.com
+<span class="token comment"># 上面命令不会检查服务器的 SSL 证书是否正确。</span></code></pre>
+<p><strong>请求跟随服务器的重定向</strong></p>
+<p><code>-L</code> 参数会让 <code>HTTP</code> 请求跟随服务器的重定向。<code>curl</code> 默认不跟随重定向。</p>
+<pre><code class="language-shell"><span class="token function">curl</span> -L -d <span class="token string">'tweet=hi'</span> https://api.example.com/tweet</code></pre>
+<p><strong>调试参数</strong></p>
+<p><code>-v</code> 参数输出通信的整个过程，用于调试。</p>
+<pre><code class="language-shell"><span class="token function">curl</span> -v https://www.example.com
+<span class="token comment"># --trace参数也可以用于调试，还会输出原始的二进制数据。</span></code></pre>
+<pre><code class="language-shell">&#36; <span class="token function">curl</span> --trace - https://www.example.com</code></pre>
 <p><strong>获取本机外网ip</strong></p>
 <pre><code class="language-shell"><span class="token function">curl</span> ipecho.net/plain</code></pre>
 <!-- Linux命令行搜索引擎：https://jaywcjlove.github.io/linux-command/ -->
@@ -232,7 +297,7 @@ X-Pingback: http://wangchujiang.com/xmlrpc.php</code></pre>
 </div>
 <script>
 var _hmt = _hmt || []; (function() {var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?a542c0213a9aa8ae29fccdc8a18b91ef"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
-<script type="text/javascript" src="../js/dt.js?v=1569814735528"></script>
-<script type="text/javascript" src="../js/index.js?v=1569814735528"></script>
+<script type="text/javascript" src="../js/dt.js?v=1570678476121"></script>
+<script type="text/javascript" src="../js/index.js?v=1570678476121"></script>
 </body>
 </html>
